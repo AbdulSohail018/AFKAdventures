@@ -9,12 +9,14 @@ Our Steam games recommendation system implements collaborative filtering, conten
 Data is sourced using the Steam Web API and was processed. Data is available [here](https://drive.google.com/drive/folders/1PhvTPd60Jr2QaJwgtjsm-sj-WRHADyLO)
 
 ### Data Preprocessing 
-Data was prepared by merging different datasets gathered and data preprocessing involved removing nulls, duplicates and then selecting relevant features and utilize them for the analysis. 
+Data was prepared by merging different datasets gathered and data preprocessing involved removing nulls, duplicates and then selecting relevant features and utilizing them for the analysis. 
 
 ## Steps to Dowload the file:
+
 ### Installation
 Install the Python Environment and download the zip folder from the repository. Using the command prompt, navigate to the directory of the folder.
 
+To download data, run the following command: **`python setup.py extract`**
+
 ### For EDA
-1. To download data, run the following command: **`python setup.py`**
-2. To get visualization and information about the data, run the following command: **`python sources/eda.py`**
+- To get visualization and information about the data, run the following command: **`python sources/eda.py`**
