@@ -5,7 +5,7 @@ import numpy as np
 from scipy.sparse import coo_matrix, csr_matrix
 from sklearn.model_selection import train_test_split
 from implicit.bpr import BayesianPersonalizedRanking
-from sklearn.metrics import roc_curve, auc
+from sklearn.metrics import roc_curve, auc, f1_score
 import matplotlib.pyplot as plt
 
 def load_data(file_path):
@@ -134,18 +134,24 @@ def calculate_precision_recall_at_k(model, test_interactions, train_interactions
     print(f"Precision@{k}: {precision_at_k}, Recall@{k}: {recall_at_k}")
     return precision_at_k, recall_at_k
 
-def plot_precision_recall_vs_k(precision, recall, k_range):
-    print("Plotting Precision and Recall vs Number of Recommendations...")
+def f1_at_k(precision, recall):
+    if precision + recall == 0:
+        return 0
+    return 2 * (precision * recall) / (precision + recall)
+
+def plot_precision_recall_f1_vs_k(precision, recall, f1, k_range):
+    print("Plotting Precision, Recall, and F1 vs Number of Recommendations...")
     plt.figure(figsize=(10, 5))
     plt.plot(k_range, precision, label='Precision@k', marker='o')
     plt.plot(k_range, recall, label='Recall@k', marker='o')
-    plt.title('Precision and Recall vs Number of Recommendations')
+    plt.plot(k_range, f1, label='F1 Score@k', marker='o')
+    plt.title('Precision, Recall, and F1 Score vs Number of Recommendations')
     plt.xlabel('Number of Top K Recommendations')
     plt.ylabel('Score')
     plt.legend()
     plt.grid(True)
     plt.show()
-    print("Plotting Precision and Recall completed.\n")
+    print("Plotting Precision, Recall, and F1 completed.\n")
 
 def calculate_auc(model, test_interactions, train_interactions):
     print("Calculating AUC...")
@@ -211,17 +217,19 @@ if __name__ == "__main__":
     # Train the BPR model
     model = train_bpr_model(train_interactions)
 
-    # Calculate Precision and Recall for different K values
+    # Calculate Precision, Recall, and F1 Score for different K values
     k_values = list(range(1, 11))
     precisions = []
     recalls = []
+    f1_scores = []
 
     for k in k_values:
         prec, rec = calculate_precision_recall_at_k(model, test_interactions, train_interactions, k=k)
         precisions.append(prec)
         recalls.append(rec)
+        f1_scores.append(f1_at_k(prec, rec))
 
-    plot_precision_recall_vs_k(precisions, recalls, k_values)
+    plot_precision_recall_f1_vs_k(precisions, recalls, f1_scores, k_values)
 
     # Calculate and plot AUC
     fpr, tpr, roc_auc = calculate_auc(model, test_interactions, train_interactions)
