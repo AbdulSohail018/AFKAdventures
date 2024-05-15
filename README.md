@@ -34,8 +34,12 @@ To get visualizations and information about the data, run the following command:
 
     
 ### To install dependencies, run the following:
-pip install -r requirements.txt
+**`pip install -r requirements.txt`**
 
 ### For recommmendation using Colloborative filtering, run the following command
 
 **`python models/colloborativefiltering.py`**.
+
+### For recommmendation using Content Based filtering, run the following command
+
+**`python models/contentfiltering.py`**.
