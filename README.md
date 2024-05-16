@@ -47,3 +47,7 @@ To get visualizations and information about the data, run the following command:
 ### For recommmendations using Density-based spatial clustering, run the following command
 
 **`python models/dbscan.py`**
+
+### For recommmendations using Hierarchical clustering, run the following command
+
+**`python models/hierarchical.py`**
