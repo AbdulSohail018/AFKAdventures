@@ -135,7 +135,7 @@ def preprocess_and_split_data(file_path):
     # Loop through the list of columns and create a plot for each one
     for i, col in enumerate(columns_to_transform):
         sns.histplot(data_encoded[col], bins=30, kde=True, color='blue', alpha=0.6, ax=axes[i])
-        axes[i].set_title(f'Raw data Distribution with KDE - {col}')
+        axes[i].set_title(f'Raw data Distribution- {col}')
         axes[i].set_xlabel('Value')
         axes[i].set_ylabel('Frequency')
         axes[i].grid(True)
@@ -178,7 +178,7 @@ def preprocess_and_split_data(file_path):
     # Loop through the list of columns and create a plot for each one
     for i, col in enumerate(columns_to_transform):
         sns.histplot(df_transformed[col], bins=30, kde=True, color='blue', alpha=0.6, ax=axes[i])
-        axes[i].set_title(f'Log Transformed Distribution with KDE - {col}')
+        axes[i].set_title(f'Log Transformed - {col}')
         axes[i].set_xlabel('Value')
         axes[i].set_ylabel('Frequency')
         axes[i].grid(True)
@@ -279,6 +279,39 @@ def preprocess_and_split_data(file_path):
         return train_transformed, validation_transformed, test_transformed
 
     train_transformed, validation_transformed, test_transformed = apply_quantile_transformation(train_data, validation_data, test_data)
+
+    # Visualize the quantile-transformed data
+    columns_to_transform = [col + '_qt_normal' for col in ['average_forever', 'average_2weeks', 'median_forever',
+                                                           'median_2weeks', 'ccu', 'price', 'ratings', 'owners_average',
+                                                           'mutualplayercount']]
+
+    # Determine the layout of the subplots
+    num_columns = 3  # Define the number of columns in your subplot grid
+    num_rows = (len(columns_to_transform) + num_columns - 1) // num_columns  # Calculate the number of rows needed
+
+    # Create a figure and a set of subplots
+    fig, axes = plt.subplots(num_rows, num_columns, figsize=(15, num_rows * 5))
+
+    # Flatten the axes array for easier iteration
+    axes = axes.flatten()
+
+    # Loop through the list of columns and create a plot for each one
+    for i, col in enumerate(columns_to_transform):
+        sns.histplot(train_transformed[col], bins=30, kde=True, color='blue', alpha=0.6, ax=axes[i])
+        axes[i].set_title(f'Quantile Transformed - {col}')
+        axes[i].set_xlabel('Value')
+        axes[i].set_ylabel('Frequency')
+        axes[i].grid(True)
+
+    # Adjust layout to prevent overlap
+    plt.tight_layout()
+
+    # If there are any leftover axes, turn them off
+    for j in range(i + 1, len(axes)):
+        axes[j].axis('off')
+
+    # Show the plot
+    plt.show()
 
     df_model_transformed = pd.concat([train_transformed, validation_transformed, test_transformed], ignore_index=True)
 
